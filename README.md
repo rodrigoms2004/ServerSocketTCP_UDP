@@ -21,7 +21,7 @@ Clone it from git and install npm packages
 ```
 git clone https://github.com/rodrigoms2004/ServerSocketTCP_UDP.git
 cd ServerSocketTCP_UDP
-nmap install
+npm install
 
 ```
 
