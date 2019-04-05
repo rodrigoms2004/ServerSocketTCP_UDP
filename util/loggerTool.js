@@ -2,11 +2,12 @@
 const winston = require('winston')
 const moment = require('moment')
 require('winston-daily-rotate-file')
+const conf = require('../config/config')
 
 const transports = [
     new winston.transports.DailyRotateFile({
         name: 'logs',
-        filename: 'log/server/access%DATE%.log',
+        filename: conf.logdir + 'access%DATE%.log',
         maxSize: '1000k',
         maxFiles: '15d',
         zippedArchive: false
@@ -14,7 +15,7 @@ const transports = [
     new winston.transports.DailyRotateFile({
         level: 'error',
         name: 'logs',
-        filename: 'log/server/error%DATE%.log',
+        filename: conf.logdir + 'error%DATE%.log',
         maxSize: '1000k',
         maxFiles: '15d',
         zippedArchive: false
