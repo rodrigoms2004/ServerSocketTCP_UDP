@@ -15,18 +15,13 @@ const server = udp.createSocket('udp4')
 
 // emits when any error occurs
 server.on('error', (error) => {
-    // console.log('Error: ' + error)
     log("udp_server", "error", error)
     server.close()
 })
 
 // emits on new datagram msg
 server.on('message', (msg,info) => {
-    log("udp_server", 
-        "info", msg.toString() + ` | Received ${msg.length} bytes from ${info.address}:${info.port}`)
-
-    // console.log('Data received from client : ' + msg.toString())
-    // console.log('Received %d bytes from %s:%d\n',msg.length, info.address, info.port)
+    log("udp_server", "info", msg.toString() + ` | Received ${msg.length} bytes from ${info.address}:${info.port}`)
 
     let timestp = new Date()
     const response = {
@@ -48,7 +43,6 @@ server.on('message', (msg,info) => {
             client.close()
         } else {
             log("udp_server", "info", 'Data sent !!!')
-            // console.log('Data sent !!!')
         }    
     })
 })  // end server.on
@@ -64,22 +58,11 @@ server.on('listening', () => {
     log("udp_server", "info", 'Server is listening at port ' + port)
     log("udp_server", "info", 'Server ip :' + ipaddr)
     log("udp_server", "info", 'Server is IP4/IP6 : ' + family)
-
-    // console.log('Server is listening at port ' + port)
-    // console.log('Server ip :' + ipaddr)
-    // console.log('Server is IP4/IP6 : ' + family)
 })
 
 //emits after the socket is closed using socket.close()
 server.on('close', () => {
-
     log("udp_server", "info", 'Socket is closed !')
-
-    console.log('Socket is closed !')
 })
 
 server.bind(conf.port)
-
-// setTimeout( () => {
-//     server.close()
-// }, conf.timeout)

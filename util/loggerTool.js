@@ -1,35 +1,46 @@
 
 const winston = require('winston')
+const moment = require('moment')
+require('winston-daily-rotate-file')
+
+const transports = [
+    new winston.transports.DailyRotateFile({
+        name: 'logs',
+        filename: 'log/server/access%DATE%.log',
+        maxSize: '1000k',
+        maxFiles: '15d',
+        zippedArchive: false
+    }),
+    new winston.transports.DailyRotateFile({
+        level: 'error',
+        name: 'logs',
+        filename: 'log/server/error%DATE%.log',
+        maxSize: '1000k',
+        maxFiles: '15d',
+        zippedArchive: false
+    }),
+    new winston.transports.Console({
+        colorize: true
+    })
+]
 
 const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    // defaultMeta: { service: 'serverSocket' },
-    transports: [
-        //
-        // - Write to all logs with level `info` and below to `combined.log` 
-        // - Write all logs error (and below) to `error.log`.
-        //
-
-        new winston.transports.File({ filename: 'log/server/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'log/server/combined.log' })
-    ]
+    // format: winston.format.json(),
+    // defaultMeta: { timestamp: new Date() },
+    transports: transports
 })
-   
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-// 
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(new winston.transports.Console({ format: winston.format.simple() }))
-}
+
+
+// if (process.env.NODE_ENV !== 'production') {
+//     logger.add(new winston.transports.Console({ format: winston.format.simple() }))
+// }
 
 const log = async (service, level, msg) => {
     logger.log({
+        timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSSS'),
         service: service,
         level: level,
-        message: msg,
-        logTimeStamp: new Date().toJSON()    
+        message: msg
     })
 }   // end infoLog
 
